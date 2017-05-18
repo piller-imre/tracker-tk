@@ -9,7 +9,6 @@ Base = declarative_base()
 
 class Category(Base):
     """The categories of the measurements"""
-
     __tablename__ = 'categories'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=None)
@@ -18,7 +17,6 @@ class Category(Base):
 
 class Measurement(Base):
     """The measurements"""
-
     __tablename__ = 'measurements'
     id = Column(Integer, primary_key=True)
     value = Column(Float, nullable=None)
@@ -27,8 +25,10 @@ class Measurement(Base):
     category = relationship('Category', backref='measurements')
 
 
-engine = create_engine('sqlite:////tmp/tracker.db')
-Base.metadata.create_all(engine)
-
-Session = sessionmaker(bind=engine)
-session = Session()
+def create_database_session(database_uri):
+    """Create a new database session."""
+    engine = create_engine(database_uri)
+    Base.metadata.create_all(engine)
+    session_factory = sessionmaker(bind=engine)
+    session = session_factory()
+    return session
