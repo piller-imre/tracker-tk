@@ -27,6 +27,14 @@ class Tracker(object):
         else:
             raise ValueError("The '{}' category has already exists!".format(name))
 
+    def is_integer_category(self, name):
+        """Check that the category is integer."""
+        if self.has_category(name):
+            category = self._session.query(Category).filter_by(name=name).first()
+            return category.is_integer
+        else:
+            raise ValueError("The '{}' category is missing!".format(name))
+
     def list_categories(self):
         """List the names of the categories."""
         categories = self._session.query(Category).all()
